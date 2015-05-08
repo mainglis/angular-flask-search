@@ -1,8 +1,24 @@
-<form action="/search/" method="post">
-    <input type="text" name="search_input"/>
-    <input type="submit" value="Submit" />
-</form>
+{% extends "index.html" %}
 
 {% block content %}
-    {{results}}
+
+    <div ng-controller="searchController">
+        <form>
+            <input type="text" ng-model="searchTerms"/>
+            <input ng-click="submit()" type="submit" value="Submit" />
+        </form>
+    [[results]]
+    </div>
+
+     <!--<div ng-controller="searchController">-->
+    <!--Search for movie titles-->
+        <!--<form ng-submit="submit()">-->
+          <!--<input ng-change="submit()" type="text" ng-model="searchTerms" name="text" />-->
+        <!--</form>-->
+
+        <!--[[results]]-->
+    <!--</div>-->
+
 {% endblock %}
+
+

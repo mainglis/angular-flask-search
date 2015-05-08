@@ -25,8 +25,10 @@ def date_handler(obj):
 
 @app.route('/angular-search/<searchterms>', methods=['POST', 'GET'])
 def api_search(searchterms):
+    print searchterms
     foo = celery.send_task("tasks.search", [searchterms])
     results = foo.get()
+    print results
     # return jsonify({'results': results})
     return json.dumps(results, default=date_handler)
 
