@@ -3,21 +3,24 @@
 {% block content %}
 
     <div ng-controller="searchController">
-        <form>
-            <input type="text" ng-model="searchTerms"/>
-            <input ng-click="submit()" type="submit" value="Submit" />
+        {{results}}
+        <form ng-submit="submit()">
+          <input pav-search="submit()" type="text" ng-model="searchTerms" name="text" />
         </form>
-    [[results]]
+        <p>Angular data will be below</p>
+        [[results]]
+        <h3>And in a ng-table!</h3>
+        <table ng-table="tableParams">
+            <tr ng-repeat="item in $data">
+                <td data-title="'Title'" sortable="'title'">
+                    [[item.title]]
+                </td>
+                <td data-title="'Description'" sortable="'description'">
+                    [[item.description]]
+                </td>
+            </tr>
+        </table>
     </div>
-
-     <!--<div ng-controller="searchController">-->
-    <!--Search for movie titles-->
-        <!--<form ng-submit="submit()">-->
-          <!--<input ng-change="submit()" type="text" ng-model="searchTerms" name="text" />-->
-        <!--</form>-->
-
-        <!--[[results]]-->
-    <!--</div>-->
 
 {% endblock %}
 

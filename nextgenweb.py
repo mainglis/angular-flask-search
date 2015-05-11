@@ -14,10 +14,12 @@ def index():
 @app.route('/search/', methods=['POST', 'GET'])
 def search():
     results = []
-    if request.form.get('search_input') != None:
-        search_input = request.form.get('search_input')
-        foo = celery.send_task("tasks.search", [search_input])
-        results = foo.get()
+    # if request.form.get('search_input') != None:
+    #     search_input = request.form.get('search_input')
+    # search_input = 'hi'
+    # foo = celery.send_task("tasks.search", [search_input])
+    # results = foo.get()
+    results = {'This is just an example of flask generated data'};
     return render_template('search.html', results=results)
 
 def date_handler(obj):
@@ -25,11 +27,8 @@ def date_handler(obj):
 
 @app.route('/angular-search/<searchterms>', methods=['POST', 'GET'])
 def api_search(searchterms):
-    print searchterms
     foo = celery.send_task("tasks.search", [searchterms])
     results = foo.get()
-    print results
-    # return jsonify({'results': results})
     return json.dumps(results, default=date_handler)
 
 if __name__ == '__main__':

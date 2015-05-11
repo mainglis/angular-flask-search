@@ -1,16 +1,7 @@
-var app = angular.module('nextgenweb', [], function($interpolateProvider) {
+var app = angular.module('nextgenweb', ['ngTable'], function($interpolateProvider) {
         $interpolateProvider.startSymbol('[[');
         $interpolateProvider.endSymbol(']]');
     });
-//    app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
-//        $urlRouterProvider.otherwise('/search');
-//        $stateProvider
-//            .state('angular-search', {
-//                url:'/search',
-//                templateUrl: '/static/partials/search.html',
-//                controller: 'searchController'
-//            })
-//    }])
     app.directive('pavSearch', [function () {
         return {
             restrict: 'A',
@@ -31,7 +22,7 @@ var app = angular.module('nextgenweb', [], function($interpolateProvider) {
             }
         };
     }])
-    .controller('searchController', ['$scope', '$http', function($scope, $http) {
+    .controller('searchController', ['$scope', '$http', '$filter', 'ngTableParams', function($scope, $http, $filter, ngTableParams) {
         $scope.value = "first";
         console.log('i get to search controller but scope is', $scope.value);
 
@@ -41,11 +32,35 @@ var app = angular.module('nextgenweb', [], function($interpolateProvider) {
                 .get('/angular-search/' + $scope.searchTerms)
                 .success(function(data, status, headers, config) {
                     $scope.results = data;
+                    console.log('scope results', $scope.results);
+                    $scope.makeTable($scope.results);
                 })
                 .error(function(data, status, headers, config) {
                     console.log('error');
                 });
         }
+
+        $scope.makeTable = function(data) {
+            $scope.tableParams = new ngTableParams({
+                page: 1,            // show first page
+                count: 10,          // count per page
+                sorting: {
+                    name: 'asc'     // initial sorting
+                }
+            }, {
+                total: data.length, // length of data
+                getData: function($defer, params) {
+                    // use build-in angular filter
+                    var orderedData = params.sorting() ?
+                                        $filter('orderBy')(data, params.orderBy()) :
+                                        data;
+
+                    $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+                }
+            });
+        };
+
+
     }]);
 
 
