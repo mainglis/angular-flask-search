@@ -32,4 +32,4 @@ def api_search(searchterms):
     return json.dumps(results, default=date_handler)
 
 if __name__ == '__main__':
-   app.run(debug=True)
+   app.run(host="10.211.6.131", port=5000, debug=True)
