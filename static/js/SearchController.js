@@ -17,6 +17,20 @@ app.controller('SearchController', ['$scope', '$http', '$filter', 'ngTableParams
                 });
         }
 
+        $scope.submit2 = function() {
+        console.log('hi i get to 2');
+             $http
+                .get('/angular-search/' + $scope.searchTerms2)
+                .success(function(data, status, headers, config) {
+                    $scope.results2 = data;
+                    console.log('scope2 results2', $scope.results2);
+                    $scope.makeTable($scope.results2);
+                })
+                .error(function(data, status, headers, config) {
+                    console.log('error');
+                });
+        }
+
         $scope.makeTable = function(data) {
             $scope.tableParams = new ngTableParams({
                 page: 1,            // show first page
